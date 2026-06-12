@@ -1,0 +1,19 @@
+TIL TANLASH FUNKSIYASI QO'SHILDI
+
+Tillar:
+- O'zbek 🇺🇿
+- Rus 🇷🇺
+- Ingliz 🇬🇧
+
+Knopka uslubi:
+- Siz bergan 3D stacked / skew / hover animatsiya uslubiga mos
+- Tanlangan til yonida bayroq va til nomi chiqadi
+- Tanlangan til localStorage'ga saqlanadi
+
+Qayerlarda bor:
+- index.html → filial tanlash sahifasi
+- buxoro.html → Buxoro filiali sayt nav qismida
+- tashkent.html → Tez orada sahifasida
+
+Eslatma:
+Admin panel kontenti alohida. Hozircha asosiy saytning asosiy ko'rinadigan matnlari tarjima qilindi.

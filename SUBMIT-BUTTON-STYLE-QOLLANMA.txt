@@ -1,0 +1,16 @@
+ARIZA TOPSHIRISH KNOPKASI YANGILANDI
+
+Qo'shilgan effektlar:
+- BITU ranglariga mos qizil/pushti/sariq gradient
+- hoverda yaltirash va ko'tarilish animatsiyasi
+- yuborilganda progress chizig'i
+- muvaffaqiyatli yuborilganda check belgisi animatsiyasi
+- xato bo'lsa shake animatsiyasi
+
+Ko'rish:
+1) index.html ni oching
+2) Ariza bo'limiga boring
+3) Ariza qoldirish tugmasini bosing
+
+Admin panel avvalgidek yashirin:
+/admin yoki admin/index.html

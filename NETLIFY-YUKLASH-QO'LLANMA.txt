@@ -1,0 +1,11 @@
+NETLIFYGA TO'G'RI YUKLASH
+
+1) ZIP faylni kompyuterga yuklab oling.
+2) ZIPni Extract qiling.
+3) Netlify Deploy sahifasiga ZIPni emas, ichidagi "bitu-netlify-ready" papkasining o'zini drag & drop qiling.
+4) Muhim: index.html, styles.css, script.js va assets papkasi bir joyda — root ichida turishi kerak.
+
+Agar faqat text/skelet ko'rinsa:
+- styles.css va script.js fayllari index.html yonida turganini tekshiring.
+- Netlifyga ichki papkani emas, aynan root sayt papkasini yuklang.
+- Brauzer cache-ni Ctrl + F5 bilan yangilang.

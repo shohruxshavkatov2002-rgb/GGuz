@@ -1,0 +1,20 @@
+ALOHIDA LOADING / FILIAL TANLASH PAGE
+
+Endi index.html faqat filial tanlash sahifasi.
+U yerda 2 ta knopka bor:
+
+1) Buxoro filiali
+   - local: buxoro.html
+   - online: /buxoro
+
+2) Toshkent filiali
+   - local: tashkent.html
+   - online: /tashkent
+   - hozircha faqat 'Tez orada ishga tushadi' deb turadi.
+
+Asosiy Buxoro sayti endi buxoro.html ichida.
+Shuning uchun Buxoro sayti bo'sh bo'lib qolmaydi.
+
+Admin panel:
+- local: admin/index.html
+- online: /admin

@@ -1,0 +1,22 @@
+ARIZA TOPSHIRISH KNOPKASI — EXACT STYLE
+
+Siz bergan CSS/HTML uslubiga yaqin qilib qayta qilindi:
+- .button
+- .text
+- .progress-bar
+- svg ichida .check
+
+BITU ranglariga moslashtirildi:
+- to'q bordo
+- qizil/pushti gradient
+- sariq/yumshoq oq progress/check fon
+
+Animatsiya:
+1) knopka bosiladi
+2) button kichrayadi
+3) progress-bar o'rtadan kengayadi
+4) progress aylana holatga o'tadi
+5) check chiziladi
+
+Ko'rish:
+index.html → Ariza bo'limi → Ariza qoldirish

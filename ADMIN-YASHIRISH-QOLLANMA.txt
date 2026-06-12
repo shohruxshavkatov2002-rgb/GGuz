@@ -1,0 +1,14 @@
+ADMIN PANEL YASHIRILDI
+
+Saytda Admin link endi ko'rinmaydi.
+
+Admin panelga kirish:
+- Online Netlify saytida: https://saytingiz.netlify.app/admin
+- Local ko'rishda: admin/index.html ni oching
+- Eski variant ham qolgan: admin.html
+
+Demo parol:
+12345678
+
+Eslatma:
+Agar Netlify'da /admin ochilmasa, deploy qilingandan keyin cache tozalab qayta deploy qiling.

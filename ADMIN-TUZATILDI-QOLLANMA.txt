@@ -1,0 +1,20 @@
+ADMIN PANEL TUZATILDI
+
+Kirish:
+- admin/index.html
+- parol: 12345678
+
+Tuzatilganlar:
+- admin-cms.js qayta yozildi
+- login ishlashi barqaror qilindi
+- 3 til tablari ishlaydi: O'zbek / Rus / English
+- saqlash localStorage'ga yozadi
+- Default tugmasi qo'shildi
+- eski localStorage muammosi bo'lsa Default ni bosing, keyin Saqlashni bosing
+
+Eslatma:
+Agar brauzer eski versiyani ushlab qolsa:
+1) eski papkani yopib tashlang
+2) yangi ZIPni alohida extract qiling
+3) admin/index.html ni oching
+4) Ctrl+F5 bosing

@@ -1,0 +1,27 @@
+BITU LOCAL PREVIEW — FIXED VERSION
+
+Bu versiya Netlify/GitHubsiz ishlaydi.
+
+Ochish:
+1) ZIPni Extract qiling.
+2) index.html ni oching — sayt.
+3) admin.html ni oching — admin panel.
+
+Admin demo parol:
+12345678
+
+Ariza formasi:
+- Internet yoki Netlify kerak emas.
+- Ariza localStorage ichiga saqlanadi.
+- admin.html → Arizalar bo'limida ko'rinadi.
+- CSV yuklab olish ishlaydi.
+
+Eslatma:
+Bu faqat offline demo. Real online versiyada arizalar server/Netlify bazaga va Telegramga boradi.
+
+
+Yangi narsa:
+- foydalanuvchi yuborgan video hero foniga joylandi;
+- oldingi gradient overlay kamaytirildi;
+- B harfli logo o'rniga yuklangan BITU logotipi qo'yildi;
+- animatsiyalar yumshatilib, hover effektlar yaxshilandi.

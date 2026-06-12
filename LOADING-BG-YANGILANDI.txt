@@ -1,0 +1,16 @@
+LOADING PAGE BACKGROUND YANGILANDI
+
+O'zgarish:
+- Loading / filial tanlash sahifasidan video olib tashlandi.
+- O'rniga BITU ranglariga mos tibbiyot elementlari bilan chiroyli background qo'yildi:
+  - medical plus belgilar
+  - dori kapsula elementlari
+  - heartbeat chizig'i
+  - DNK dekor
+  - grid va gradient fon
+
+Tarkib:
+- index.html → filial tanlash sahifasi
+- buxoro.html → Buxoro filiali sayti
+- tashkent.html → Toshkent filiali Tez orada sahifasi
+- admin/index.html → admin panel

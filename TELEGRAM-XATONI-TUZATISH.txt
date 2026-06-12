@@ -1,0 +1,45 @@
+BITU TELEGRAM + NETLIFY TO'G'RILANGAN VERSIYA
+
+Sizda chiqqan xabar sababi:
+- TELEGRAM_BOT_TOKEN yoki TELEGRAM_CHAT_ID Netlify Environment variables ichida yo'q;
+- bot kanal/guruhga admin qilinmagan;
+- CHAT_ID noto'g'ri;
+- deploy eski cache bilan ochilgan.
+
+1) Telegram bot tayyorlash
+- @BotFather orqali bot yarating.
+- Tokenni oling.
+- Botni Telegram kanal/guruhga qo'shing.
+- Kanalga yubormoqchi bo'lsangiz botni ADMIN qiling.
+
+2) CHAT_ID topish
+A) Guruh uchun:
+- Botni guruhga qo'shing.
+- Guruhga /start yoki test xabar yozing.
+- Brauzerda oching:
+  https://api.telegram.org/botBOT_TOKEN/getUpdates
+- chat.id ni ko'chiring. Guruh ID odatda -100 bilan boshlanadi.
+
+B) Kanal uchun:
+- Kanal username bilan bo'lsa, TELEGRAM_CHAT_ID sifatida @kanal_username yozsa ham bo'ladi.
+- Private kanal uchun -100... ID kerak bo'ladi va bot admin bo'lishi shart.
+
+3) Netlify sozlamalari
+Netlify panel:
+Site configuration yoki Site settings → Environment variables → Add variable
+
+TELEGRAM_BOT_TOKEN = BotFather bergan token
+TELEGRAM_CHAT_ID = @kanal_username yoki -100xxxxxxxxxx
+
+4) Qayta deploy
+- Environment variables qo'shilgandan keyin saytni qayta deploy qiling.
+- Deploys → Trigger deploy → Clear cache and deploy site.
+- Brauzerda Ctrl + F5 bosing.
+
+5) Test
+Forma yuborilganda xato bo'lsa, endi sayt aniq sababni ko'rsatadi:
+- chat not found
+- bot was blocked
+- bot is not a member
+- not enough rights
+- token invalid

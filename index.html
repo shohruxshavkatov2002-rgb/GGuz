@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BITU — Filialni tanlang</title>
+  <meta name="description" content="BITU universiteti filialini tanlash sahifasi." />
+  <meta name="theme-color" content="#2a0610" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="branch-start-page">
+  <main class="branch-start">
+    <div class="branch-start__overlay" aria-hidden="true"></div>
+    <div class="branch-start__medical-bg" aria-hidden="true">
+      <span class="medical-plus medical-plus--one">+</span>
+      <span class="medical-plus medical-plus--two">+</span>
+      <span class="medical-plus medical-plus--three">+</span>
+      <span class="medical-pill medical-pill--one"></span>
+      <span class="medical-pill medical-pill--two"></span>
+      <span class="medical-circle medical-circle--one"></span>
+      <span class="medical-circle medical-circle--two"></span>
+      <span class="medical-heartline"></span>
+      <span class="medical-dna"></span>
+    </div>
+
+    <section class="branch-start__card">
+      <div class="branch-start__logo-wrap">
+        <img src="assets/bitu-logo.png" alt="BITU logotipi" class="branch-start__logo">
+      </div>
+      <span class="branch-start__kicker">BITU universiteti</span>
+      <h1>Filialni tanlang</h1>
+      <p>Kerakli filialni tanlang. Knopka bosilgandan keyin shu filial sahifasiga o‘tasiz.</p>
+      <div class="loading-lang-panel" data-lang-switcher>
+        <div class="loading-lang-panel__head">
+          <span data-lang-title>Tilni tanlang</span>
+        </div>
+
+        <ul class="lang-stack lang-stack--loading" aria-label="Til tanlash">
+          <li class="lang-stack__item is-active" data-lang="uz">
+            <button type="button" class="lang-stack__btn" aria-label="O‘zbek tili">
+              <span><img src="assets/flag-uz.png" alt=""></span>
+              <span><img src="assets/flag-uz.png" alt=""></span>
+              <span><img src="assets/flag-uz.png" alt=""></span>
+              <span><img src="assets/flag-uz.png" alt=""></span>
+              <span><img src="assets/flag-uz.png" alt=""></span>
+            </button>
+            <strong>O‘zbek</strong>
+          </li>
+          <li class="lang-stack__item" data-lang="ru">
+            <button type="button" class="lang-stack__btn" aria-label="Русский язык">
+              <span><img src="assets/flag-ru.png" alt=""></span>
+              <span><img src="assets/flag-ru.png" alt=""></span>
+              <span><img src="assets/flag-ru.png" alt=""></span>
+              <span><img src="assets/flag-ru.png" alt=""></span>
+              <span><img src="assets/flag-ru.png" alt=""></span>
+            </button>
+            <strong>Русский</strong>
+          </li>
+          <li class="lang-stack__item" data-lang="en">
+            <button type="button" class="lang-stack__btn" aria-label="English language">
+              <span><img src="assets/flag-en.jpg" alt=""></span>
+              <span><img src="assets/flag-en.jpg" alt=""></span>
+              <span><img src="assets/flag-en.jpg" alt=""></span>
+              <span><img src="assets/flag-en.jpg" alt=""></span>
+              <span><img src="assets/flag-en.jpg" alt=""></span>
+            </button>
+            <strong>English</strong>
+          </li>
+        </ul>
+      </div>
+
+      <div class="branch-start__buttons">
+        <a class="branch-start__btn branch-start__btn--buxoro" href="buxoro.html">
+          <span>Buxoro filiali</span>
+          <small>Asosiy saytga kirish</small>
+        </a>
+        <a class="branch-start__btn branch-start__btn--tashkent" href="tashkent.html">
+          <span>Toshkent filiali</span>
+          <small>Tez orada</small>
+        </a>
+      </div>
+    </section>
+  </main>
+  <script src="cms-site.js"></script>
+  <script src="lang.js"></script>
+</body>
+</html>

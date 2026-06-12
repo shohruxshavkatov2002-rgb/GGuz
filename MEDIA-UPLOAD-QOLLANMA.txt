@@ -1,0 +1,24 @@
+MEDIA FUNKSIYALAR QAYTA QO'SHILDI
+
+Admin panel → Kontakt / media bo'limida:
+- Logo rasm yuklash
+- Hero video yuklash
+- Hero poster/fon rasm yuklash
+- Logo/video/poster yo'lini qo'lda yozish
+- Telefon, email, social linklar
+
+Admin panel → Yangiliklar bo'limida:
+- Har bir yangilikka rasm yuklash
+- Rasm yo'lini qo'lda yozish
+
+Muhim:
+Katta video localStorage limitidan oshib ketishi mumkin.
+Katta video bo'lsa:
+1) videoni assets papkaga qo'ying
+2) admin panelda Video yo'li maydoniga yozing:
+   assets/video-nomi.mp4
+3) Saqlashni bosing
+
+Kirish:
+- admin/index.html
+- parol: 12345678

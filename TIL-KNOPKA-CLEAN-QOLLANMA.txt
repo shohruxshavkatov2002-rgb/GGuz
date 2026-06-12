@@ -1,0 +1,9 @@
+TIL TANLASH BLOKI IXCHAMLASHTIRILDI
+
+O'zgarishlar:
+- Til tanlash orqasidagi katta shape/panel olib tashlandi.
+- O'ng tepadagi tanlangan til pill/badge olib tashlandi.
+- Bayroq knopkalaridagi gradient fon olib tashlandi.
+- Bayroq knopkalari sezilarli darajada kichraytirildi.
+- Filial tanlash knopkalari ham ixchamroq va gradientlarsiz qilindi.
+- Til tanlash faqat loading page'da qoldi.

@@ -1,0 +1,23 @@
+REAL ONLINE CMS TAYYOR
+
+Bu versiya endi faqat localStorage emas.
+Netlify Functions + Netlify Blobs orqali hamma uchun bitta online baza ishlaydi.
+
+Netlify deploy qilingandan keyin:
+- /        → til + filial tanlash
+- /buxoro  → Buxoro filiali
+- /tashkent → Toshkent tez orada
+- /admin   → admin panel
+
+Admin panel:
+- parol: 12345678
+- xavfsizlik uchun Netlify'da Environment variable qo'ying:
+  ADMIN_PASSWORD = yangi-parolingiz
+
+Admin panelda Saqlash bosilganda:
+- matnlar online bazaga saqlanadi
+- barcha foydalanuvchilarda bir xil ko'rinadi
+
+Media:
+- logo / poster / yangilik rasmi online Blob storage'ga yuklanadi
+- katta video uchun eng yaxshi yo'l: assets papkaga mp4 joylang va yo'lini yozing

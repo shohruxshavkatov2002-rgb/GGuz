@@ -1,0 +1,29 @@
+3 TIL + ADMIN PANEL
+
+Sayt endi 3 tilda ishlaydi:
+- O'zbek
+- Rus
+- Ingliz
+
+Til tanlash faqat index.html sahifasida.
+Tanlangan til localStorage'ga saqlanadi va buxoro.html hamda tashkent.html shu tilda ochiladi.
+
+Admin panel:
+- admin/index.html
+- parol: 12345678
+
+Admin panelda yuqorida 3 ta til tugmasi bor:
+🇺🇿 O'zbek / 🇷🇺 Русский / 🇬🇧 English
+
+Har bir til uchun alohida tahrirlanadi:
+- filial tanlash matnlari
+- Toshkent tez orada sahifasi
+- brand/nav
+- hero matnlari
+- about/afzalliklar
+- yo'nalishlar
+- FAQ
+- yangiliklar
+- ariza formasi tugma/xabarlar
+
+Logo, telefon, email va hero media umumiy.

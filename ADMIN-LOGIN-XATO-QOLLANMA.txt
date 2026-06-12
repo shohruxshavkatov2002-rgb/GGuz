@@ -1,0 +1,28 @@
+ADMIN LOGIN TEKSHIRILMOQDA... DA QOLSA
+
+1) ADMIN_PASSWORD borligini tekshiring
+Netlify → Site configuration → Environment variables:
+ADMIN_PASSWORD = siz tanlagan parol
+
+2) Environment qo'shgandan keyin qayta deploy qiling
+Deploys → Trigger deploy → Clear cache and deploy site
+
+3) Function ishlayaptimi tekshirish
+Brauzerda oching:
+https://SIZNING-SAYTINGIZ.netlify.app/.netlify/functions/admin-login
+
+To'g'ri bo'lsa shunaqa JSON chiqadi:
+{"ok":true,"message":"Admin login function ishlayapti...","hasAdminPassword":true}
+
+Agar 404 chiqsa:
+- yangi ZIP to'liq deploy bo'lmagan
+- Netlify Functions ishlamayapti
+- noto'g'ri fayl/papka yuklangan
+
+4) ZIP deploy qilish tartibi
+ZIPni extract qiling.
+Extract qilingan papkaning ichida admin.html, index.html, netlify/functions papkasi borligini tekshiring.
+Shu papkani Netlify'ga drag & drop qiling.
+
+5) Agar hasAdminPassword false chiqsa:
+ADMIN_PASSWORD kiritilmagan yoki redeploy qilinmagan.

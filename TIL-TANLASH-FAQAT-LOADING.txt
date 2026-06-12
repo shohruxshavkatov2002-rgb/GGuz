@@ -1,0 +1,11 @@
+TIL TANLASH FAQAT LOADING PAGE'DA QOLDIRILDI
+
+O'zgarishlar:
+1) Til tanlash knopkalari faqat index.html (filial tanlash / loading page) da.
+2) Buxoro va Toshkent sahifalaridan til tanlash knopkalari olib tashlandi.
+3) Tanlangan til localStorage'ga saqlanadi va keyingi sahifada shu til qo'llanadi.
+4) Emojilar o'rniga siz yuborgan real bayroq rasmlari qo'shildi:
+   - O'zbekiston bayrog'i
+   - Rossiya bayrog'i
+   - Angliya/UK bayrog'i
+5) Knopkalar joylashuvi loading page'da chiroyli panel ichida joylashtirildi.

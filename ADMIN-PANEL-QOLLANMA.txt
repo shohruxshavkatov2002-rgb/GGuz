@@ -1,0 +1,22 @@
+BITU ADMIN PANEL QO'LLANMA
+
+Admin panel manzili:
+https://SIZNING-SAYTINGIZ.netlify.app/admin.html
+
+Netlify Environment variables:
+ADMIN_PASSWORD = admin panelga kirish paroli
+TELEGRAM_BOT_TOKEN = BotFather bergan bot token
+TELEGRAM_CHAT_ID = @kanal_username yoki -100... chat ID
+
+Deploy:
+1) ZIPni extract qiling.
+2) Extract qilingan papkani Netlify'ga drag & drop qiling.
+3) Environment variables qo'shgandan keyin: Deploys → Trigger deploy → Clear cache and deploy site.
+
+Admin panel imkoniyatlari:
+- Parol bilan kirish
+- Arizalarni ko'rish
+- Statistika
+- Qidiruv va filter
+- CSV export
+- Arizalarni Netlify Blobs bazasida saqlash

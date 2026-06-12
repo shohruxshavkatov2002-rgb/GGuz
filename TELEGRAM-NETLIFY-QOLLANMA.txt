@@ -1,0 +1,42 @@
+TELEGRAMGA ARIZA YUBORISHNI SOZLASH
+
+1) Telegramda @BotFather orqali bot yarating.
+   - /newbot
+   - Bot tokenni oling.
+
+2) Botni ariza keladigan Telegram kanal yoki guruhga qo‘shing.
+   - Kanal bo‘lsa: botni Admin qiling.
+   - Guruh bo‘lsa: bot guruh ichida bo‘lishi kerak.
+
+3) Chat ID tayyorlang.
+   Variant A: Ochiq kanal uchun @kanal_username yozish mumkin.
+   Masalan: @bitu_arizalar
+
+   Variant B: Yopiq kanal/guruh uchun -100 bilan boshlanadigan chat_id kerak bo‘ladi.
+   Uni olish uchun botga test xabar yuborib, getUpdates orqali tekshirish mumkin.
+
+4) Netlify → Site settings → Environment variables bo‘limiga kiring.
+   Quyidagilarni qo‘shing:
+
+   TELEGRAM_BOT_TOKEN = BotFather bergan token
+   TELEGRAM_CHAT_ID = @kanal_username yoki -100xxxxxxxxxx
+
+5) Netlify’da qayta deploy qiling.
+   Deploys → Trigger deploy → Clear cache and deploy site.
+
+6) Forma test:
+   Saytdagi “Ariza qoldirish” formasini to‘ldiring.
+   Telegramga quyidagi ma’lumotlar boradi:
+   - F.I.O.
+   - Telefon
+   - Bosqich
+   - Yo‘nalish
+   - Ariza turi
+   - Viloyat yoki davlat
+   - Email
+   - Izoh
+   - Yuborilgan vaqt
+
+MUHIM:
+Bot tokenni hech qachon index.html yoki script.js ichiga yozmang.
+Bu versiyada token Netlify Function ichida environment variable orqali yashirin ishlaydi.

@@ -1,0 +1,36 @@
+[build]
+  publish = "."
+
+[functions]
+  directory = "netlify/functions"
+  included_files = ["data/site-default.json"]
+
+[[redirects]]
+  from = "/admin"
+  to = "/admin/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin/"
+  to = "/admin/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/buxoro"
+  to = "/buxoro.html"
+  status = 200
+
+[[redirects]]
+  from = "/buxoro/"
+  to = "/buxoro.html"
+  status = 200
+
+[[redirects]]
+  from = "/tashkent"
+  to = "/tashkent.html"
+  status = 200
+
+[[redirects]]
+  from = "/tashkent/"
+  to = "/tashkent.html"
+  status = 200

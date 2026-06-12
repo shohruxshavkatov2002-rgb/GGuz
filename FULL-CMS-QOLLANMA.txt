@@ -1,0 +1,32 @@
+BITU FULL CMS ADMIN PANEL
+
+Bu versiyada admin panel vazifalari:
+1) Saytdagi logo, nom, telefon, email, manzil, hero title, matnlar va knopka matnlarini o'zgartirish.
+2) Yo'nalishlar qo'shish/o'chirish/tahrirlash.
+3) FAQ qo'shish/o'chirish/tahrirlash.
+4) Qo'shimcha ma'lumot bloklari qo'shish.
+5) Tushgan arizalarni ko'rish, qidirish va CSV yuklab olish.
+6) Arizalar Telegramga ham boradi, admin panel bazasiga ham yoziladi.
+
+NETLIFY ENVIRONMENT VARIABLES:
+ADMIN_PASSWORD = admin panel paroli
+TELEGRAM_BOT_TOKEN = BotFather token
+TELEGRAM_CHAT_ID = @kanal_username yoki -100... chat id
+
+GITHUB + NETLIFY DEPLOY:
+1) ZIPni extract qiling.
+2) Extract qilingan ichidagi hamma fayl/papkalarni GitHub repo rootiga yuklang.
+3) Netlify → Add new project → Import from GitHub.
+4) Build settings:
+   Build command: bo'sh qoldirish mumkin
+   Publish directory: .
+   Functions directory: netlify/functions
+5) Environment variables qo'shing.
+6) Deploys → Trigger deploy → Clear cache and deploy site.
+
+ADMIN PANEL:
+https://SIZNING-SAYTINGIZ.netlify.app/admin.html
+
+FUNCTION TEST:
+https://SIZNING-SAYTINGIZ.netlify.app/.netlify/functions/admin-login
+To'g'ri bo'lsa: hasAdminPassword:true chiqadi.

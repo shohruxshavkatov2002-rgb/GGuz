@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BITU CMS Admin Panel</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin-cms.css" />
+</head>
+<body>
+  <div class="admin-shell">
+    <aside class="cms-sidebar">
+      <a class="cms-brand" href="buxoro.html">
+        <span class="cms-brand-logo"><img src="assets/bitu-logo.png" alt="BITU logo" /></span>
+        <div><b>BITU CMS</b><small>3 til boshqaruvi</small></div>
+      </a>
+
+      <nav>
+        <button class="nav-item is-active" data-tab="content">Asosiy matnlar</button>
+        <button class="nav-item" data-tab="programs">Yo‘nalishlar</button>
+        <button class="nav-item" data-tab="faq">FAQ</button>
+        <button class="nav-item" data-tab="news">Yangiliklar</button>
+        <button class="nav-item" data-tab="media">Kontakt / media</button>
+        <button class="nav-item" data-tab="leads">Arizalar</button>
+      </nav>
+
+      <button class="logout" id="logoutBtn">Chiqish</button>
+    </aside>
+
+    <main class="cms-main">
+      <section class="login-card" id="loginCard">
+        <div class="login-logo"><img src="assets/bitu-logo.png" alt="BITU logo" /></div>
+        <h1>Admin panelga kirish</h1>
+        <p>Parolni kiriting. Demo parol: <b>12345678</b></p>
+        <form id="loginForm">
+          <input type="password" name="password" placeholder="Admin parol" required />
+          <button type="submit">Kirish</button>
+        </form>
+        <div class="notice" id="loginNotice"></div>
+      </section>
+
+      <section class="dashboard" id="dashboard" hidden>
+        <header class="cms-header">
+          <div>
+            <span>BITU CMS Dashboard</span>
+            <h1>3 tilda sayt boshqaruvi</h1>
+            <p>O‘zbek, rus va ingliz tillaridagi ma’lumotlarni alohida tahrirlang.</p>
+          </div>
+          <div class="header-actions">
+            <a href="index.html" target="_blank">Filial tanlash</a>
+            <a href="buxoro.html" target="_blank">Buxoro sayt</a>
+            <button id="refreshBtn">Yangilash</button>
+            <button id="resetBtn">Default</button>
+            <button id="saveBtn" class="primary">Saqlash</button>
+          </div>
+        </header>
+
+        <div class="notice" id="mainNotice"></div>
+
+        <div class="admin-lang-tabs">
+          <button class="admin-lang is-active" data-lang="uz">🇺🇿 O‘zbek</button>
+          <button class="admin-lang" data-lang="ru">🇷🇺 Русский</button>
+          <button class="admin-lang" data-lang="en">🇬🇧 English</button>
+        </div>
+
+        <section class="tab-panel is-active" data-panel="content">
+          <div class="grid two">
+            <div class="card">
+              <h2>Filial tanlash / Toshkent page</h2>
+              <div class="form-grid">
+                <label>Kicker<input data-bind="landing.kicker" /></label>
+                <label>Til sarlavhasi<input data-bind="landing.languageTitle" /></label>
+                <label class="full">Filial tanlash sarlavhasi<textarea data-bind="landing.title"></textarea></label>
+                <label class="full">Filial tanlash matni<textarea data-bind="landing.text"></textarea></label>
+                <label>Buxoro knopka<input data-bind="landing.buxoroBtn" /></label>
+                <label>Buxoro kichik matn<input data-bind="landing.buxoroSmall" /></label>
+                <label>Toshkent knopka<input data-bind="landing.tashkentBtn" /></label>
+                <label>Toshkent kichik matn<input data-bind="landing.tashkentSmall" /></label>
+                <label>Toshkent badge<input data-bind="soon.badge" /></label>
+                <label class="full">Toshkent sarlavha<textarea data-bind="soon.title"></textarea></label>
+                <label class="full">Toshkent matn<textarea data-bind="soon.text"></textarea></label>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Brand va navigatsiya</h2>
+              <div class="form-grid">
+                <label>Universitet nomi<input data-bind="brand.name" /></label>
+                <label>Subtitle<input data-bind="brand.subtitle" /></label>
+                <label class="full">Manzil<textarea data-bind="brand.address"></textarea></label>
+                <label>Hotline matni<input data-bind="topbar.hotline" /></label>
+                <label>Nav Universitet<input data-bind="nav.about" /></label>
+                <label>Nav Yo‘nalishlar<input data-bind="nav.programs" /></label>
+                <label>Nav Imkoniyatlar<input data-bind="nav.campus" /></label>
+                <label>Nav Xalqaro<input data-bind="nav.international" /></label>
+                <label>Nav Ariza<input data-bind="nav.apply" /></label>
+              </div>
+            </div>
+
+            <div class="card full">
+              <h2>Hero / About / Ariza</h2>
+              <div class="form-grid">
+                <label>Hero eyebrow<input data-bind="hero.eyebrow" /></label>
+                <label class="full">Hero sarlavha<textarea data-bind="hero.title"></textarea></label>
+                <label class="full">Hero matn<textarea data-bind="hero.lead"></textarea></label>
+                <label>Hero 1-knopka<input data-bind="hero.primaryButton" /></label>
+                <label>Hero 2-knopka<input data-bind="hero.secondaryButton" /></label>
+                <label>About kicker<input data-bind="about.kicker" /></label>
+                <label class="full">About sarlavha<textarea data-bind="about.title"></textarea></label>
+                <label class="full">About matn<textarea data-bind="about.text"></textarea></label>
+                <label>Ariza sarlavha<input data-bind="apply.title" /></label>
+                <label>Ariza tugma<input data-bind="apply.submit" /></label>
+                <label class="full">Ariza muvaffaqiyat xabari<textarea data-bind="apply.success"></textarea></label>
+              </div>
+              <h3>Afzalliklar</h3>
+              <div id="featuresEditor" class="repeat-list"></div>
+              <button class="soft" id="addFeatureBtn">+ Afzallik qo‘shish</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-panel="programs">
+          <div class="card">
+            <div class="card-top">
+              <div><h2>Yo‘nalishlar</h2><p>Tanlangan til bo‘yicha yo‘nalish nomi, davomiylik va narx o‘zgaradi.</p></div>
+              <button class="soft" id="addProgramBtn">+ Yo‘nalish qo‘shish</button>
+            </div>
+            <div class="form-grid">
+              <label>Bo‘lim sarlavhasi<input data-bind="programSection.title" /></label>
+              <label>Qidiruv placeholder<input data-bind="programSection.searchPlaceholder" /></label>
+              <label>Bakalavr tab<input data-bind="programSection.labels.bachelor" /></label>
+              <label>Magistr tab<input data-bind="programSection.labels.master" /></label>
+              <label>Ordinatura tab<input data-bind="programSection.labels.residency" /></label>
+            </div>
+            <div id="programsEditor" class="repeat-list"></div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-panel="faq">
+          <div class="card">
+            <div class="card-top">
+              <div><h2>FAQ</h2></div>
+              <button class="soft" id="addFaqBtn">+ FAQ qo‘shish</button>
+            </div>
+            <div class="form-grid">
+              <label>FAQ sarlavha<input data-bind="faq.title" /></label>
+              <label class="full">FAQ matn<textarea data-bind="faq.text"></textarea></label>
+            </div>
+            <div id="faqEditor" class="repeat-list"></div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-panel="news">
+          <div class="card">
+            <div class="card-top">
+              <div><h2>Yangiliklar</h2></div>
+              <button class="soft" id="addNewsBtn">+ Yangilik qo‘shish</button>
+            </div>
+            <div class="form-grid">
+              <label>Yangilik sarlavhasi<input data-bind="news.title" /></label>
+            </div>
+            <div id="newsEditor" class="repeat-list"></div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-panel="media">
+          <div class="grid two">
+            <div class="card">
+              <h2>Logo almashtirish</h2>
+              <p class="muted">Logo 3 til uchun umumiy ishlaydi.</p>
+              <div class="form-grid">
+                <label class="full">Logo yo‘li<input data-common-bind="logoImage" placeholder="assets/bitu-logo.png" /></label>
+                <label class="full">Logo rasm yuklash
+                  <input type="file" id="logoUpload" accept="image/*" />
+                  <small class="hint">PNG, JPG yoki SVG yuklash mumkin.</small>
+                </label>
+                <div class="media-preview full compact"><img id="logoPreview" alt="Logo preview" /></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Hero video almashtirish</h2>
+              <p class="muted">Katta video localStorage limitidan oshishi mumkin. Katta fayl uchun video yo‘lini yozgan yaxshi.</p>
+              <div class="form-grid">
+                <label class="full">Video yo‘li<input data-common-bind="heroVideo" placeholder="assets/hero-medical-bg.mp4" /></label>
+                <label class="full">Video fayl yuklash
+                  <input type="file" id="heroVideoUpload" accept="video/mp4,video/webm,video/ogg" />
+                  <small class="hint">Kichik video yuklang. Katta video bo‘lsa papkaga joylab, yo‘lini yozing.</small>
+                </label>
+                <div class="media-preview full"><video id="heroVideoPreview" controls muted playsinline></video></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Hero poster / fon rasmi</h2>
+              <div class="form-grid">
+                <label class="full">Poster yo‘li<input data-common-bind="heroPoster" placeholder="assets/hero-medical-poster.jpg" /></label>
+                <label class="full">Poster rasm yuklash<input type="file" id="heroPosterUpload" accept="image/*" /></label>
+                <div class="media-preview full"><img id="heroPosterPreview" alt="Hero poster preview" /></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Kontaktlar</h2>
+              <div class="form-grid">
+                <label>Telefon 1<input data-common-bind="phone" /></label>
+                <label>Telefon 2<input data-common-bind="phone2" /></label>
+                <label>Email<input data-common-bind="email" /></label>
+                <label>Telegram<input data-common-bind="telegram" /></label>
+                <label>Instagram<input data-common-bind="instagram" /></label>
+                <label>YouTube<input data-common-bind="youtube" /></label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-panel="leads">
+          <div class="lead-tools">
+            <input id="leadSearch" type="search" placeholder="Arizalarni qidirish..." />
+            <button id="downloadLeadsBtn" class="primary">CSV yuklab olish</button>
+          </div>
+          <div class="stats-row">
+            <div><span>Jami</span><b id="leadTotal">0</b></div>
+            <div><span>Bugungi</span><b id="leadToday">0</b></div>
+            <div><span>Oxirgi</span><b id="leadLast">—</b></div>
+          </div>
+          <div class="card table-card">
+            <table>
+              <thead><tr><th>Vaqt</th><th>Ism</th><th>Telefon</th><th>Bosqich</th><th>Yo‘nalish</th><th>Izoh</th></tr></thead>
+              <tbody id="leadsTable"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+  <script src="admin-cms.js"></script>
+</body>
+</html>
