@@ -1,40 +1,31 @@
 import { Hero } from "../components/Hero";
 import {
-  FeaturesSection,
+  QuickSection,
   AboutSection,
-  ServicesSection,
-  TimelineSection,
-  TeamSection,
-  ReviewsSection,
-  CTASection,
-  NewsletterSection,
+  ProgramsSection,
+  CampusSection,
+  InternationalSection,
+  NewsSection,
+  CustomBlocksSection,
+  AppSection,
   FAQSection,
 } from "../components/sections";
-import {
-  FEATURES,
-  ABOUT,
-  SERVICES,
-  TIMELINE,
-  TEAM,
-  REVIEWS,
-  CTA,
-  NEWSLETTER,
-  FAQ,
-} from "../data/content";
+import { ApplyForm } from "../components/ApplyForm";
 
 export default function Home() {
   return (
     <>
       <Hero />
-      <FeaturesSection {...FEATURES} />
-      <AboutSection {...ABOUT} />
-      <ServicesSection {...SERVICES} />
-      <TimelineSection {...TIMELINE} />
-      <TeamSection {...TEAM} />
-      <ReviewsSection {...REVIEWS} />
-      <CTASection {...CTA} />
-      <NewsletterSection {...NEWSLETTER} />
-      <FAQSection {...FAQ} />
+      <QuickSection />
+      <AboutSection />
+      <ProgramsSection />
+      <CampusSection />
+      <InternationalSection />
+      <NewsSection />
+      <CustomBlocksSection />
+      <AppSection />
+      <FAQSection />
+      <ApplyForm />
     </>
   );
 }
