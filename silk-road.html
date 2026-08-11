@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Интерактивный атлас Великого шёлкового пути: глобус, 18 станций, Самарканд, Бухара, Хива. Один файл, без зависимостей.">
+<title>Великий шёлковый путь — интерактивный атлас</title>
+<style>
+*{box-sizing:border-box}
+:root{
+  --ground:#060911;
+  --lapis:#0d1530;
+  --lapis-2:#16224a;
+  --feruza:#3fd9c8;
+  --feruza-dim:#1f6f6a;
+  --gold:#e8b552;
+  --gold-lt:#f7dc9e;
+  --ivory:#efe4cd;
+  --terracotta:#c56a45;
+  --muted:#6d7893;
+  --line:#1d2743;
+  --panel:rgba(8,12,25,.82);
+  --display:Georgia,"Times New Roman",serif;
+  --body:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+html,body{margin:0;height:100%;overflow:hidden}
+body{
+  background:var(--ground);color:var(--ivory);font-family:var(--body);
+  -webkit-font-smoothing:antialiased;
+}
+#sky{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+#sky.drag{cursor:grabbing}
+#shell{position:fixed;inset:0;display:grid;
+  grid-template-columns:236px 1fr minmax(0,340px);
+  grid-template-rows:auto 1fr auto;
+  pointer-events:none}
+#shell>*{pointer-events:auto}
+
+/* ---- заголовок ---- */
+header{grid-column:1/4;display:flex;align-items:baseline;gap:18px;
+  padding:18px 22px 12px;border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(6,9,17,.9),rgba(6,9,17,0))}
+.mark{font-family:var(--display);font-size:19px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--ivory)}
+.mark em{font-style:normal;color:var(--gold)}
+.tagline{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;
+  color:var(--muted);text-transform:uppercase}
+.era{margin-left:auto;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.13em;color:var(--gold);white-space:nowrap}
+
+/* ---- левый указатель станций ---- */
+#index{grid-column:1;grid-row:2;overflow-y:auto;padding:16px 0 16px 22px;
+  scrollbar-width:thin;scrollbar-color:var(--line) transparent;
+  mask-image:linear-gradient(180deg,transparent,#000 22px,#000 calc(100% - 22px),transparent)}
+.grp{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--muted);
+  text-transform:uppercase;margin:14px 0 7px}
+.grp:first-child{margin-top:0}
+.st{display:flex;align-items:baseline;gap:9px;width:100%;text-align:left;
+  background:none;border:0;border-left:1px solid var(--line);
+  padding:5px 8px 5px 11px;color:var(--ivory);font-family:var(--display);
+  font-size:13.5px;letter-spacing:.055em;cursor:pointer;transition:.18s}
+.st .no{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:0}
+.st:hover{border-left-color:var(--gold);color:var(--gold-lt);background:rgba(232,181,82,.05)}
+.st:focus-visible{outline:1px solid var(--feruza);outline-offset:1px}
+.st[aria-current="true"]{border-left:1px solid var(--gold);color:var(--gold);
+  background:linear-gradient(90deg,rgba(232,181,82,.13),transparent)}
+.st.uz .no{color:var(--terracotta)}
+
+/* ---- карточка города ---- */
+#card{grid-column:3;grid-row:2;align-self:center;justify-self:end;
+  margin:0 22px;width:100%;max-width:340px;
+  background:var(--panel);border:1px solid var(--line);
+  backdrop-filter:blur(11px);padding:20px 20px 18px;
+  opacity:0;transform:translateX(14px);transition:.34s ease;visibility:hidden}
+#card.on{opacity:1;transform:none;visibility:visible}
+#card .kicker{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold)}
+#card h2{font-family:var(--display);font-weight:400;font-size:29px;
+  letter-spacing:.02em;margin:7px 0 2px;text-wrap:balance}
+#card .alt{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.09em}
+#card p{font-size:13.5px;line-height:1.62;color:#cfd6e4;margin:14px 0 0;max-width:62ch}
+#card ul{list-style:none;margin:15px 0 0;padding:13px 0 0;border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:6px}
+#card li{font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+  color:var(--feruza);border:1px solid var(--feruza-dim);padding:4px 8px}
+#card .facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-top:16px;
+  background:var(--line);border:1px solid var(--line)}
+#card .facts div{background:#070b16;padding:9px 10px}
+#card .facts b{display:block;font-family:var(--mono);font-size:12.5px;
+  color:var(--ivory);font-weight:400;font-variant-numeric:tabular-nums;margin-top:3px}
+#card .facts span{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;
+  color:var(--muted);text-transform:uppercase}
+#shut{position:absolute;top:12px;right:12px;width:24px;height:24px;background:none;
+  border:1px solid var(--line);color:var(--muted);cursor:pointer;font-size:13px;line-height:1}
+#shut:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ---- нижний приборный отсчёт ---- */
+footer{grid-column:1/4;grid-row:3;display:flex;align-items:center;gap:26px;flex-wrap:wrap;
+  padding:11px 22px 15px;border-top:1px solid var(--line);
+  background:linear-gradient(0deg,rgba(6,9,17,.92),rgba(6,9,17,0));
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--muted)}
+footer b{color:var(--ivory);font-weight:400;font-variant-numeric:tabular-nums}
+.ctl{margin-left:auto;display:flex;gap:8px}
+.ctl button{font:inherit;letter-spacing:.13em;text-transform:uppercase;
+  background:none;border:1px solid var(--line);color:var(--muted);
+  padding:6px 11px;cursor:pointer;transition:.18s}
+.ctl button:hover{border-color:var(--gold);color:var(--gold)}
+.ctl button[aria-pressed="true"]{border-color:var(--feruza-dim);color:var(--feruza)}
+.ctl button:focus-visible{outline:1px solid var(--feruza);outline-offset:1px}
+
+@media (max-width:900px){
+  #shell{grid-template-columns:1fr;grid-template-rows:auto 1fr auto auto}
+  header{grid-column:1;flex-wrap:wrap;gap:2px 10px;padding:11px 14px 9px}
+  .mark{font-size:14px;letter-spacing:.17em}
+  .tagline{font-size:8.5px}
+  .era{margin-left:0;font-size:8.5px;flex-basis:100%}
+  #index{grid-column:1;grid-row:3;display:flex;gap:6px;overflow-x:auto;overflow-y:hidden;
+    padding:8px 14px;border-top:1px solid var(--line);
+    mask-image:linear-gradient(90deg,transparent,#000 14px,#000 calc(100% - 14px),transparent)}
+  .grp{display:none}
+  .st{width:auto;flex:0 0 auto;white-space:nowrap;border-left:0;border:1px solid var(--line);
+    padding:6px 10px;font-size:12.5px}
+  .st[aria-current="true"]{border:1px solid var(--gold);background:rgba(232,181,82,.12)}
+  #card{grid-column:1;grid-row:2;align-self:end;justify-self:stretch;max-width:none;
+    margin:0 14px 8px;padding:15px 15px 14px;transform:translateY(12px);
+    max-height:44vh;overflow-y:auto;overscroll-behavior:contain}
+  #card h2{font-size:22px;margin-top:5px}
+  #card p{font-size:12.5px;line-height:1.55;margin-top:11px}
+  #card .facts{margin-top:11px}
+  #card ul{margin-top:11px;padding-top:10px}
+  #shut{top:9px;right:9px}
+  footer{grid-row:4;gap:6px 14px;padding:8px 14px 11px;font-size:9px}
+  .ctl{width:100%;margin-left:0;margin-top:2px}
+  .ctl button{flex:1;padding:7px 4px;font-size:9px}
+}
+@media (prefers-reduced-motion:reduce){
+  #card{transition:none}
+}
+</style>
+</head>
+<body>
+<canvas id="sky"></canvas>
+
+<div id="shell">
+  <header>
+    <div class="mark">Великий <em>шёлковый</em> путь</div>
+    <div class="tagline">интерактивный атлас · 18 станций · без библиотек</div>
+    <div class="era">II в. до н.э. — XV в. н.э.</div>
+  </header>
+
+  <nav id="index" aria-label="Станции пути"></nav>
+
+  <aside id="card" aria-live="polite">
+    <button id="shut" aria-label="Закрыть">×</button>
+    <div class="kicker" id="c-kick"></div>
+    <h2 id="c-name"></h2>
+    <div class="alt" id="c-alt"></div>
+    <div class="facts">
+      <div><span>координаты</span><b id="c-geo"></b></div>
+      <div><span>от Самарканда</span><b id="c-dist"></b></div>
+    </div>
+    <p id="c-text"></p>
+    <ul id="c-tags"></ul>
+  </aside>
+
+  <footer>
+    <span>долгота <b id="r-lon"></b></span>
+    <span>широта <b id="r-lat"></b></span>
+    <span>масштаб <b id="r-zoom"></b></span>
+    <span>караванов в пути <b id="r-car"></b></span>
+    <div class="ctl">
+      <button id="t-spin" aria-pressed="true">вращение</button>
+      <button id="t-road" aria-pressed="true">маршруты</button>
+      <button id="t-home">Самарканд</button>
+    </div>
+  </footer>
+</div>
+
+<script>
+(() => {
+"use strict";
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ─────────── станции пути ─────────── */
+const CITY = [
+ {n:"Самарканд",a:"Samarqand · سمرقند",lat:39.654,lon:66.975,uz:1,k:"столица империи Темура",
+  t:"Перекрёсток, ради которого весь этот путь и существовал. Афрасиаб стоял здесь ещё в VIII веке до н.э.; в 1370 году Амир Темур сделал город столицей державы и свозил сюда мастеров со всей Азии. Внук Темура Улугбек построил на холме Кухак обсерваторию с мраморным секстантом радиусом 40 метров и вычислил длину звёздного года с ошибкой менее минуты.",
+  f:["Регистан","Гур-Эмир","Обсерватория Улугбека, 1420","Биби-Ханым","Шахи-Зинда"]},
+ {n:"Бухара",a:"Buxoro · بخارا",lat:39.775,lon:64.423,uz:1,k:"благородная, священная",
+  t:"Город, который называли Бухоро-и-Шариф — Благородная Бухара. Столица Саманидов, центр учёности, где вырос Ибн Сина. Минарет Калян 1127 года высотой 47 метров веками служил маяком для караванов: на вершине зажигали огонь, и его видели за десятки километров в пустыне.",
+  f:["Минарет Калян, 1127","Мавзолей Саманидов, X в.","Крепость Арк","Ляби-Хауз","Чор-Минор"]},
+ {n:"Хива",a:"Xiva · خیوه",lat:41.378,lon:60.363,uz:1,k:"последняя застава перед пустыней",
+  t:"Внутренний город Ичан-Кала — первый объект Узбекистана в списке ЮНЕСКО (1990). Отсюда караваны уходили на север через Устюрт и на запад к Каспию. Кальта-Минор задумывался как самый высокий минарет исламского мира, но остался обрубком в 29 метров: хан умер, и стройка встала навсегда.",
+  f:["Ичан-Кала","Кальта-Минор","Куня-Арк","Джума-мечеть, 213 колонн"]},
+ {n:"Ташкент",a:"Toshkent · طاشكند",lat:41.311,lon:69.240,uz:1,k:"каменный город",
+  t:"Чач, Бинкент, Ташкент — узел, где сходились ветки пути из Ферганы и степей. В библиотеке Хазрати Имам хранится Коран Усмана — одна из старейших рукописей Корана в мире, VIII век, написанная на оленьей коже.",
+  f:["Хазрати Имам","Коран Усмана, VIII в.","Чорсу","Кукельдаш"]},
+ {n:"Шахрисабз",a:"Shahrisabz · شهر سبز",lat:39.058,lon:66.834,uz:1,k:"зелёный город",
+  t:"Кеш, родина Амира Темура (1336). Дворец Ак-Сарай строили двадцать лет; сохранились только пилоны портала, но и они поднимаются на 38 метров. Надпись на арке гласила: «Если сомневаешься в нашем могуществе — взгляни на наши постройки».",
+  f:["Ак-Сарай","Дорус-Сиадат","Кок-Гумбаз"]},
+ {n:"Термез",a:"Termiz · ترمذ",lat:37.224,lon:67.278,uz:1,k:"переправа через Амударью",
+  t:"Южные ворота: отсюда путь уходил за Окс — Амударью — на Балх и дальше в Индию. До ислама Термез был буддийским центром, и монастыри Фаяз-Тепа и Кара-Тепа стоят здесь с I–II веков. Именно этой дорогой буддизм ушёл на север, в Китай.",
+  f:["Фаяз-Тепа","Кара-Тепа","Ат-Термези","Кырк-Кыз"]},
+ {n:"Мерв",a:"Merv · مرو",lat:37.660,lon:62.192,uz:0,k:"Туркменистан",
+  t:"В XII веке — вероятно, крупнейший город мира. Мерв держал воду из Мургаба на сложнейшей системе каналов; в 1221 году монголы разрушили плотины, и оазис не восстановился.",
+  f:["Оазис Мерв","Мавзолей Санджара"]},
+ {n:"Балх",a:"Balx · بلخ",lat:36.758,lon:66.897,uz:0,k:"Афганистан",
+  t:"«Мать городов» — Бактра. Родина Заратустры по преданию и место, где Александр Македонский женился на Роксане. Узел, связавший Согд с Индией.",
+  f:["Бактрия","Ноу-Гумбад"]},
+ {n:"Нишапур",a:"Nishapur · نیشابور",lat:36.213,lon:58.796,uz:0,k:"Иран",
+  t:"Город бирюзы и Омара Хайяма — астронома, который заодно писал рубаи. Отсюда шла главная дорога на Багдад.",
+  f:["Бирюзовые копи","Омар Хайям"]},
+ {n:"Кашгар",a:"Kashgar · قەشقەر",lat:39.470,lon:75.990,uz:0,k:"Синьцзян",
+  t:"Точка, где северная и южная кромки пустыни Такла-Макан снова сходятся в одну дорогу. Караван, дошедший до Кашгара, считал перевалы Памира уже позади — или ещё впереди.",
+  f:["Такла-Макан","Памирские перевалы"]},
+ {n:"Дуньхуан",a:"Dunhuang · 敦煌",lat:40.142,lon:94.662,uz:0,k:"Ганьсу",
+  t:"Пещеры Могао: 492 храма, вырубленных в скале за тысячу лет. В замурованной келье нашли 50 тысяч рукописей, включая «Алмазную сутру» 868 года — старейшую датированную печатную книгу.",
+  f:["Пещеры Могао","Алмазная сутра, 868"]},
+ {n:"Чанъань",a:"Xi'an · 長安",lat:34.341,lon:108.940,uz:0,k:"восточный конец пути",
+  t:"Столица Хань и Тан, откуда в 138 году до н.э. вышел Чжан Цянь — посол, чей отчёт о «западных краях» и открыл дорогу. Миллион жителей при Тан; шёлк отсюда доходил до Рима.",
+  f:["Чжан Цянь, 138 до н.э.","Большая пагода диких гусей"]},
+ {n:"Дели",a:"Delhi · दिल्ली",lat:28.614,lon:77.209,uz:0,k:"индийская ветка",
+  t:"Южное ответвление через Гиндукуш: специи, хлопок, драгоценные камни шли навстречу коням и шёлку.",
+  f:["Индийская ветка"]},
+ {n:"Багдад",a:"Baghdad · بغداد",lat:33.315,lon:44.366,uz:0,k:"Ирак",
+  t:"Круглый город Аббасидов и Дом мудрости, где переводили греков и считали по-индийски. Через Багдад бумага, изобретённая в Китае и перенятая в Самарканде, ушла в Европу.",
+  f:["Дом мудрости","Круглый город, 762"]},
+ {n:"Дамаск",a:"Damascus · دمشق",lat:33.513,lon:36.292,uz:0,k:"Сирия",
+  t:"Один из старейших непрерывно населённых городов планеты и последний крупный рынок перед Средиземным морем. Дамасская сталь пришла сюда с восточных караванов.",
+  f:["Омейядская мечеть","Дамасская сталь"]},
+ {n:"Константинополь",a:"Constantinople · Κωνσταντινούπολις",lat:41.008,lon:28.978,uz:0,k:"пролив",
+  t:"В 552 году два монаха, по преданию, принесли сюда в полых посохах коконы шелкопряда — и монополия Китая на шёлк закончилась.",
+  f:["Айя-София","Коконы 552 г."]},
+ {n:"Александрия",a:"Alexandria · الإسكندرية",lat:31.200,lon:29.918,uz:0,k:"морская ветка",
+  t:"Морской выход пути: через Красное море и Индийский океан товар шёл в обход всей суши.",
+  f:["Морская ветка","Маяк"]},
+ {n:"Венеция",a:"Venezia",lat:45.440,lon:12.316,uz:0,k:"западный конец пути",
+  t:"Куда всё это приплывало. Отсюда в 1271 году ушёл на восток Марко Поло, и здесь же он продиктовал книгу, по которой Европа двести лет представляла себе Азию.",
+  f:["Марко Поло, 1271","Риальто"]}
+];
+const IDX = {}; CITY.forEach((c,i)=>IDX[c.n]=i);
+const LEG = [
+ ["Чанъань","Дуньхуан"],["Дуньхуан","Кашгар"],["Кашгар","Самарканд"],
+ ["Самарканд","Бухара"],["Бухара","Мерв"],["Мерв","Нишапур"],["Нишапур","Багдад"],
+ ["Багдад","Дамаск"],["Дамаск","Константинополь"],["Константинополь","Венеция"],
+ ["Самарканд","Ташкент"],["Бухара","Хива"],["Самарканд","Шахрисабз"],
+ ["Шахрисабз","Термез"],["Термез","Балх"],["Балх","Дели"],
+ ["Дамаск","Александрия"],["Кашгар","Балх"]
+].map(([a,b])=>({a:IDX[a],b:IDX[b]}));
+
+/* ─────────── очертания суши ─────────── */
+const LAND = [
+[-10,35,0,36,10,37,20,33,25,32,32,31,35,24,38,18,40,15,43,12,45,11,51,12,48,5,43,2,41,-2,40,-10,35,-20,33,-26,28,-33,20,-35,16,-29,12,-18,13,-10,9,-1,5,4,0,5,-8,5,-13,8,-17,15,-17,21,-13,27],
+[34,29,36,28,39,21,43,13,45,12,50,15,55,17,57,22,59,23,57,25,51,25,48,29,44,30,41,31,38,31,35,31],
+[-9,43,-2,47,-4,48,2,51,5,53,8,54,8,57,11,58,13,56,19,55,21,57,25,60,30,60,28,65,22,66,25,70,32,70,40,68,45,66,52,69,62,70,70,73,80,73,90,76,100,77,112,74,125,73,140,72,152,71,163,70,175,68,172,62,163,58,155,52,143,46,135,45,130,42,128,38,122,39,118,38,121,32,118,24,110,21,106,18,108,11,104,9,100,13,99,7,98,13,96,16,94,18,90,22,88,21,82,17,80,10,77,8,73,20,68,24,62,25,57,25,52,28,48,30,44,37,41,41,36,41,30,41,26,40,23,38,20,40,16,38,12,44,5,43,0,41,-2,37,-6,36,-9,38],
+[-168,66,-164,60,-155,58,-145,60,-135,57,-128,52,-124,46,-122,37,-117,32,-110,23,-105,20,-97,16,-92,14,-87,13,-83,9,-79,9,-83,15,-88,21,-97,25,-95,29,-89,29,-84,30,-81,25,-81,31,-76,35,-74,40,-70,43,-66,45,-60,47,-56,52,-64,58,-78,62,-85,70,-100,70,-115,70,-130,70,-141,70,-156,71],
+[-81,-4,-79,2,-75,9,-71,12,-62,10,-55,6,-50,0,-44,-2,-38,-5,-35,-8,-39,-14,-48,-25,-53,-34,-58,-38,-62,-40,-66,-45,-69,-51,-71,-55,-75,-49,-73,-42,-72,-30,-71,-20,-76,-14,-81,-6],
+[114,-22,113,-26,115,-34,129,-32,138,-35,146,-39,150,-37,153,-28,146,-19,142,-11,136,-12,130,-11,125,-14,122,-17],
+[-45,60,-52,68,-55,76,-40,83,-25,78,-22,70,-32,64],
+[-5,50,-1,51,0,53,-1,55,-3,58,-5,57,-6,54],
+[-10,52,-6,52,-6,55,-10,54],
+[130,31,136,34,140,38,145,44,141,45,137,36,132,32],
+[131,-1,141,-3,147,-6,143,-9,137,-9,132,-5],
+[109,2,114,7,118,5,119,-1,116,-4,110,-3],
+[95,6,99,3,106,-6,102,-6,95,4],
+[43,-12,50,-15,47,-25,44,-21],
+[173,-35,178,-38,174,-41,170,-46,167,-46,172,-41],
+[80,6,82,7,81,9,80,9],
+[-24,65,-14,66,-14,64,-22,63],
+[120,13,122,18,126,8,122,6],
+[-85,22,-74,20,-77,23,-85,23],
+[-180,-70,180,-70,180,-90,-180,-90]
+];
+function inLand(lon,lat){
+  for(const p of LAND){
+    let hit=false;
+    for(let i=0,j=p.length-2;i<p.length;j=i,i+=2){
+      const xi=p[i],yi=p[i+1],xj=p[j],yj=p[j+1];
+      if((yi>lat)!==(yj>lat) && lon < (xj-xi)*(lat-yi)/(yj-yi)+xi) hit=!hit;
+    }
+    if(hit) return true;
+  }
+  return false;
+}
+const D2R=Math.PI/180;
+function sph(lat,lon){const a=lat*D2R,b=lon*D2R,c=Math.cos(a);
+  return {x:c*Math.sin(b),y:Math.sin(a),z:c*Math.cos(b)};}
+
+/* сетка точек по сфере: равномерная плотность */
+const DOTS=[];
+for(let lat=-88;lat<=88;lat+=1.5){
+  const step=1.5/Math.max(.12,Math.cos(lat*D2R));
+  for(let lon=-180;lon<180;lon+=step){
+    if(!inLand(lon,lat)) continue;
+    const v=sph(lat,lon); DOTS.push(v.x,v.y,v.z);
+  }
+}
+const CV=CITY.map(c=>sph(c.lat,c.lon));
+
+/* ─────────── сцена ─────────── */
+const cv=document.getElementById("sky"), ctx=cv.getContext("2d",{alpha:false});
+let W=0,H=0,DPR=1,cx=0,cy=0,R=1,R0=1,stars=null;
+let yaw=-66.975*D2R, pitch=39.654*D2R, zoom=1.22;
+let vYaw=0,vPitch=0, drag=null, fly=null, sel=0, spin=!RM, roads=true, t0=performance.now();
+const DIST=3.4, LIGHT={x:-.42,y:.46,z:.78};
+(function(){const m=Math.hypot(LIGHT.x,LIGHT.y,LIGHT.z);LIGHT.x/=m;LIGHT.y/=m;LIGHT.z/=m;})();
+
+function resize(){
+  DPR=Math.min(2,devicePixelRatio||1);
+  W=innerWidth;H=innerHeight;
+  cv.width=W*DPR;cv.height=H*DPR;cv.style.width=W+"px";cv.style.height=H+"px";
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  stars=document.createElement("canvas");
+  stars.width=cv.width;stars.height=cv.height;
+  const s=stars.getContext("2d");
+  s.setTransform(DPR,0,0,DPR,0,0);
+  s.fillStyle="#060911";s.fillRect(0,0,W,H);
+  let seed=20240;
+  const rnd=()=>(seed=(seed*1664525+1013904223)>>>0)/4294967296;
+  for(let i=0;i<420;i++){
+    const x=rnd()*W,y=rnd()*H,r=rnd()*1.05+.25,a=rnd()*.5+.12;
+    s.fillStyle=`rgba(${230-rnd()*60|0},${226-rnd()*40|0},210,${a})`;
+    s.beginPath();s.arc(x,y,r,0,7);s.fill();
+  }
+}
+/* глобус вписывается в реальный просвет между панелями, а не в проценты экрана */
+const elHdr=document.querySelector("header"),elFtr=document.querySelector("footer"),
+      elNav=document.getElementById("index");
+function layout(){
+  const wide=W>900, top=elHdr.getBoundingClientRect().bottom+10;
+  let bot,left,right;
+  if(wide){
+    bot=elFtr.getBoundingClientRect().top-10;
+    left=elNav.getBoundingClientRect().right+10;
+    right=card.getBoundingClientRect().left-10;
+  }else{
+    bot=card.getBoundingClientRect().top+30;
+    left=8;right=W-8;
+  }
+  cx=(left+right)/2; cy=(top+bot)/2;
+  const fit=Math.min((right-left)/2,(bot-top)/2)-20;
+  R0=Math.max(70,fit/1.2/1.22);   /* лимб = R×1.2, стартовый зум 1.22 */
+  resizeZoom();
+}
+addEventListener("resize",()=>{resize();layout()});
+
+function rot(v){
+  const cy1=Math.cos(yaw),sy=Math.sin(yaw);
+  const x=v.x*cy1+v.z*sy, z1=-v.x*sy+v.z*cy1;
+  const cp=Math.cos(pitch),sp=Math.sin(pitch);
+  return {x, y:v.y*cp-z1*sp, z:v.y*sp+z1*cp};
+}
+const focal=()=>R*Math.sqrt(DIST*DIST-1);
+const CUT=1/DIST;
+function proj(p){const k=focal()/(DIST-p.z);return {x:cx+p.x*k, y:cy-p.y*k, s:k};}
+
+function draw(now){
+  const dt=Math.min(50,now-t0); t0=now;
+
+  if(fly){
+    fly.t=Math.min(1,fly.t+dt/900);
+    const e=fly.t<.5?4*fly.t**3:1-Math.pow(-2*fly.t+2,3)/2;
+    yaw=fly.y0+fly.dy*e; pitch=fly.p0+fly.dp*e; zoom=fly.z0+fly.dz*e;
+    if(fly.t>=1) fly=null;
+  }else{
+    if(!drag){
+      yaw+=vYaw; pitch+=vPitch; vYaw*=.94; vPitch*=.94;
+      if(Math.abs(vYaw)<1e-5)vYaw=0; if(Math.abs(vPitch)<1e-5)vPitch=0;
+      if(spin&&!vYaw) yaw+=dt*.000045;
+    }
+  }
+  pitch=Math.max(-1.48,Math.min(1.48,pitch));
+
+  ctx.drawImage(stars,0,0,W,H);
+
+  /* корпус глобуса */
+  const g=ctx.createRadialGradient(cx-R*.34,cy-R*.36,R*.06,cx,cy,R);
+  g.addColorStop(0,"#1b2a55");g.addColorStop(.55,"#101a3a");g.addColorStop(1,"#070c1c");
+  ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.fill();
+
+  /* атмосфера */
+  const h=ctx.createRadialGradient(cx,cy,R*.94,cx,cy,R*1.14);
+  h.addColorStop(0,"rgba(63,217,200,.16)");h.addColorStop(1,"rgba(63,217,200,0)");
+  ctx.fillStyle=h;ctx.beginPath();ctx.arc(cx,cy,R*1.14,0,7);ctx.fill();
+
+  /* суша: 5 ступеней освещённости */
+  const B=[[],[],[],[],[]];
+  for(let i=0;i<DOTS.length;i+=3){
+    const p=rot({x:DOTS[i],y:DOTS[i+1],z:DOTS[i+2]});
+    if(p.z<=CUT) continue;
+    const l=p.x*LIGHT.x+p.y*LIGHT.y+p.z*LIGHT.z;
+    if(l<-.28) continue;
+    const q=proj(p);
+    B[Math.min(4,Math.max(0,Math.round((l+.28)*3.1)))].push(q.x,q.y);
+  }
+  const SHADE=["rgba(31,111,106,.5)","rgba(38,142,133,.72)","rgba(52,180,166,.86)","rgba(63,217,200,.95)","rgba(146,240,225,1)"];
+  const d=Math.max(1.2,R*.0062);
+  for(let b=0;b<5;b++){
+    if(!B[b].length) continue;
+    ctx.fillStyle=SHADE[b];
+    for(let i=0;i<B[b].length;i+=2) ctx.fillRect(B[b][i]-d/2,B[b][i+1]-d/2,d,d);
+  }
+
+  /* градусная сетка */
+  ctx.strokeStyle="rgba(232,181,82,.13)";ctx.lineWidth=1;
+  for(let lon=-180;lon<180;lon+=30) arc(lat=>sph(lat,lon),-88,88);
+  for(let lat=-60;lat<=60;lat+=30) arc(lon=>sph(lat,lon),-180,180);
+  function arc(f,a,b){
+    ctx.beginPath();let on=false;
+    for(let t=a;t<=b;t+=3){
+      const p=rot(f(t));
+      if(p.z<=CUT){on=false;continue}
+      const q=proj(p);
+      if(on)ctx.lineTo(q.x,q.y);else{ctx.moveTo(q.x,q.y);on=true}
+    }
+    ctx.stroke();
+  }
+
+  /* маршруты и караваны */
+  let caravans=0;
+  if(roads){
+    for(let k=0;k<LEG.length;k++){
+      const A=CV[LEG[k].a],Bv=CV[LEG[k].b];
+      const ang=Math.acos(Math.max(-1,Math.min(1,A.x*Bv.x+A.y*Bv.y+A.z*Bv.z)));
+      const lift=1+Math.min(.19,ang*.11), n=Math.max(20,Math.round(ang*44));
+      const pts=[];
+      for(let i=0;i<=n;i++){
+        const t=i/n, s=Math.sin(ang)||1;
+        const w1=Math.sin((1-t)*ang)/s, w2=Math.sin(t*ang)/s;
+        const r=1+(lift-1)*Math.sin(Math.PI*t);
+        const p=rot({x:(A.x*w1+Bv.x*w2)*r,y:(A.y*w1+Bv.y*w2)*r,z:(A.z*w1+Bv.z*w2)*r});
+        pts.push(p.z>CUT*r?proj(p):null);
+      }
+      const live=sel>=0&&(LEG[k].a===sel||LEG[k].b===sel);
+      ctx.strokeStyle=live?"rgba(247,220,158,.85)":"rgba(232,181,82,.34)";
+      ctx.lineWidth=live?1.5:1;
+      ctx.beginPath();let on=false;
+      for(const q of pts){if(!q){on=false;continue}if(on)ctx.lineTo(q.x,q.y);else{ctx.moveTo(q.x,q.y);on=true}}
+      ctx.stroke();
+      /* караван */
+      const ph=((now*.00006+k*.137)%1);
+      const idx=Math.floor(ph*n);
+      for(let s=0;s<7;s++){
+        const q=pts[idx-s];if(!q)continue;
+        caravans+= s===0?1:0;
+        ctx.fillStyle=`rgba(255,236,190,${.9-s*.12})`;
+        const rr=(s===0?2.4:1.7)*(R/300);
+        ctx.beginPath();ctx.arc(q.x,q.y,Math.max(.9,rr),0,7);ctx.fill();
+      }
+    }
+  }
+
+  /* города */
+  const pulse=RM?1:.5+.5*Math.sin(now*.0022);
+  ctx.textBaseline="middle";
+  const labels=[];
+  for(let i=0;i<CITY.length;i++){
+    const c=CITY[i],p=rot(CV[i]);
+    if(p.z<=CUT) continue;
+    const q=proj(p), fade=Math.min(1,(p.z-CUT)*4.2);
+    if(i===sel){
+      ctx.strokeStyle=`rgba(247,220,158,${.5*fade})`;ctx.lineWidth=1;
+      ctx.beginPath();ctx.arc(q.x,q.y,7+pulse*7,0,7);ctx.stroke();
+    }
+    if(c.uz){
+      ctx.strokeStyle=`rgba(197,106,69,${.75*fade})`;ctx.lineWidth=1;
+      ctx.beginPath();ctx.arc(q.x,q.y,5.4,0,7);ctx.stroke();
+    }
+    ctx.fillStyle=c.uz?"#c56a45":"#e8b552";
+    ctx.globalAlpha=fade;
+    ctx.beginPath();ctx.arc(q.x,q.y,c.uz?3:2.1,0,7);ctx.fill();
+    ctx.globalAlpha=1;
+    if(fade>.35) labels.push({i,c,q,fade,pri:i===sel?0:c.uz?1:2});
+  }
+  /* подписи: ближние важнее, наложения отбрасываем */
+  labels.sort((a,b)=>a.pri-b.pri||b.q.s-a.q.s);
+  const taken=labels.map(L=>({x:L.q.x-6,y:L.q.y-6,w:12,h:12}));
+  for(const L of labels){
+    ctx.font=`${L.c.uz?12.5:11}px Georgia, serif`;
+    const w=ctx.measureText(L.c.n).width+7;
+    let box=null,first=null;
+    for(const [dx,dy] of [[8,0],[-8-w,0],[8,-16],[8,16],[-8-w,-16],[-8-w,16]]){
+      const r={x:L.q.x+dx,y:L.q.y-8+dy,w,h:16};
+      first=first||r;
+      if(!taken.some(t=>r.x<t.x+t.w&&r.x+r.w>t.x&&r.y<t.y+t.h&&r.y+r.h>t.y)){box=r;break}
+    }
+    if(!box){ if(L.pri!==0) continue; box=first; }  /* выбранный город подписан всегда */
+    taken.push(box);
+    ctx.fillStyle=`rgba(6,9,17,${.74*L.fade})`;
+    ctx.fillRect(box.x,box.y+.5,box.w,15);
+    ctx.fillStyle=L.pri===0?`rgba(247,220,158,${L.fade})`
+      :L.c.uz?`rgba(239,228,205,${L.fade})`:`rgba(196,205,222,${L.fade*.88})`;
+    ctx.fillText(L.c.n,box.x+3.5,box.y+8.5);
+  }
+
+  /* лимб астролябии */
+  const LR=R*1.2;
+  ctx.strokeStyle="rgba(232,181,82,.34)";ctx.lineWidth=1;
+  ctx.beginPath();ctx.arc(cx,cy,LR,0,7);ctx.stroke();
+  ctx.strokeStyle="rgba(232,181,82,.16)";
+  ctx.beginPath();ctx.arc(cx,cy,LR+5,0,7);ctx.stroke();
+  for(let a=0;a<360;a+=3){
+    const big=a%15===0, r1=LR, r2=LR+(big?5:2.4);
+    const rad=(a-90)*D2R,co=Math.cos(rad),si=Math.sin(rad);
+    ctx.strokeStyle=big?"rgba(232,181,82,.5)":"rgba(232,181,82,.2)";
+    ctx.beginPath();ctx.moveTo(cx+co*r1,cy+si*r1);ctx.lineTo(cx+co*r2,cy+si*r2);ctx.stroke();
+  }
+  ctx.font="9px ui-monospace, monospace";ctx.fillStyle="rgba(232,181,82,.55)";
+  ctx.textAlign="center";
+  for(let a=0;a<360;a+=45){
+    const rad=(a-90)*D2R;
+    ctx.fillText(a+"°",cx+Math.cos(rad)*(LR+15),cy+Math.sin(rad)*(LR+15));
+  }
+  /* указатель текущей долготы */
+  ctx.fillStyle="#f7dc9e";
+  ctx.beginPath();ctx.moveTo(cx,cy-LR-9);ctx.lineTo(cx-4,cy-LR-17);ctx.lineTo(cx+4,cy-LR-17);ctx.closePath();ctx.fill();
+  ctx.textAlign="left";
+
+  /* приборный отсчёт */
+  const lon=norm(-yaw/D2R), lat=pitch/D2R;
+  rLon.textContent=Math.abs(lon).toFixed(1)+"° "+(lon>=0?"в.д.":"з.д.");
+  rLat.textContent=Math.abs(lat).toFixed(1)+"° "+(lat>=0?"с.ш.":"ю.ш.");
+  rZoom.textContent="×"+zoom.toFixed(2);
+  rCar.textContent=roads?String(caravans):"0";
+
+  requestAnimationFrame(draw);
+}
+const norm=a=>{while(a>180)a-=360;while(a<-180)a+=360;return a};
+
+/* ─────────── управление ─────────── */
+cv.addEventListener("pointerdown",e=>{
+  drag={x:e.clientX,y:e.clientY,mx:e.clientX,my:e.clientY,moved:0};
+  fly=null;cv.setPointerCapture(e.pointerId);cv.classList.add("drag");
+});
+cv.addEventListener("pointermove",e=>{
+  if(!drag)return;
+  const dx=e.clientX-drag.x, dy=e.clientY-drag.y;
+  drag.moved+=Math.abs(dx)+Math.abs(dy);
+  const k=.0042/zoom;
+  yaw+=dx*k; pitch+=dy*k; vYaw=dx*k; vPitch=dy*k;
+  drag.x=e.clientX;drag.y=e.clientY;
+});
+cv.addEventListener("pointerup",e=>{
+  const d=drag;drag=null;cv.classList.remove("drag");
+  if(d&&d.moved<6) pick(e.clientX,e.clientY);
+});
+cv.addEventListener("pointercancel",()=>{drag=null;cv.classList.remove("drag")});
+cv.addEventListener("wheel",e=>{
+  e.preventDefault();
+  zoom=Math.max(.75,Math.min(2.6,zoom*(e.deltaY>0?.92:1.087)));
+  resizeZoom();
+},{passive:false});
+function resizeZoom(){R=R0*zoom}
+function pick(px,py){
+  let best=-1,bd=26;
+  for(let i=0;i<CITY.length;i++){
+    const p=rot(CV[i]); if(p.z<=CUT)continue;
+    const q=proj(p), dd=Math.hypot(q.x-px,q.y-py);
+    if(dd<bd){bd=dd;best=i}
+  }
+  if(best>=0) select(best,true);
+}
+function flyTo(i){
+  const c=CITY[i];
+  const ty=norm(-c.lon)*D2R, tp=c.lat*D2R, tz=Math.max(zoom,1.25);
+  let dy=ty-yaw; while(dy>Math.PI)dy-=2*Math.PI; while(dy<-Math.PI)dy+=2*Math.PI;
+  if(RM){yaw=ty;pitch=tp;zoom=tz;resizeZoom();return}
+  fly={t:0,y0:yaw,p0:pitch,z0:zoom,dy,dp:tp-pitch,dz:tz-zoom};
+}
+const card=document.getElementById("card");
+function select(i,move){
+  sel=i;const c=CITY[i];
+  document.querySelectorAll(".st").forEach(b=>b.setAttribute("aria-current",b.dataset.i==i));
+  document.getElementById("c-kick").textContent=c.k;
+  document.getElementById("c-name").textContent=c.n;
+  document.getElementById("c-alt").textContent=c.a;
+  document.getElementById("c-geo").textContent=c.lat.toFixed(2)+"° "+c.lon.toFixed(2)+"°";
+  const km=gc(c,CITY[0]);
+  document.getElementById("c-dist").textContent=km?km.toLocaleString("ru-RU")+" км":"— начало отсчёта";
+  document.getElementById("c-text").textContent=c.t;
+  document.getElementById("c-tags").innerHTML=c.f.map(f=>"<li>"+f+"</li>").join("");
+  card.classList.add("on");
+  layout();
+  if(move) flyTo(i);
+}
+function gc(a,b){
+  const p=a.lat*D2R,q=b.lat*D2R,dl=(b.lon-a.lon)*D2R;
+  const v=Math.sin(p)*Math.sin(q)+Math.cos(p)*Math.cos(q)*Math.cos(dl);
+  return Math.round(6371*Math.acos(Math.max(-1,Math.min(1,v))));
+}
+
+/* левый указатель */
+const nav=document.getElementById("index");
+let html='<div class="grp">Узбекистан · сердце пути</div>';
+CITY.forEach((c,i)=>{
+  if(i===6) html+='<div class="grp">Дальше по маршруту</div>';
+  html+=`<button class="st${c.uz?" uz":""}" data-i="${i}" aria-current="false">
+    <span class="no">${String(i+1).padStart(2,"0")}</span><span>${c.n}</span></button>`;
+});
+nav.innerHTML=html;
+nav.addEventListener("click",e=>{
+  const b=e.target.closest(".st"); if(b) select(+b.dataset.i,true);
+});
+document.getElementById("shut").onclick=()=>{card.classList.remove("on");sel=-1;
+  document.querySelectorAll(".st").forEach(b=>b.setAttribute("aria-current","false"))};
+const tSpin=document.getElementById("t-spin"), tRoad=document.getElementById("t-road");
+tSpin.onclick=()=>{spin=!spin;tSpin.setAttribute("aria-pressed",spin)};
+tRoad.onclick=()=>{roads=!roads;tRoad.setAttribute("aria-pressed",roads)};
+document.getElementById("t-home").onclick=()=>select(0,true);
+if(RM) tSpin.setAttribute("aria-pressed","false");
+addEventListener("keydown",e=>{
+  const k=.09;
+  if(e.key==="ArrowLeft")yaw-=k;else if(e.key==="ArrowRight")yaw+=k;
+  else if(e.key==="ArrowUp")pitch-=k;else if(e.key==="ArrowDown")pitch+=k;
+  else if(e.key==="+"||e.key==="="){zoom=Math.min(2.6,zoom*1.1);resizeZoom()}
+  else if(e.key==="-"){zoom=Math.max(.75,zoom/1.1);resizeZoom()}
+  else if(e.key.toLowerCase()==="r")select(0,true);
+  else return;
+  fly=null;e.preventDefault();
+});
+
+const rLon=document.getElementById("r-lon"),rLat=document.getElementById("r-lat"),
+      rZoom=document.getElementById("r-zoom"),rCar=document.getElementById("r-car");
+resize();select(0,false);layout();requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>
